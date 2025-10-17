@@ -10,13 +10,15 @@ import { App } from './app';
 import { CustomerCreate } from './customers/customer-create/customer-create';
 import { CustomerEdit } from './customers/customer-edit/customer-edit';
 import { CustomerIndex } from './customers/customer-index/customer-index';
+import { EditButton } from './customers/customer-index/edit-button/edit-button';
 
 @NgModule({
   declarations: [
     App,
     CustomerCreate,
     CustomerEdit,
-    CustomerIndex
+    CustomerIndex,
+    EditButton
   ],
   imports: [
     BrowserModule,

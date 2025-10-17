@@ -1,0 +1,13 @@
+.blue-icon {
+  color: #007bff; /* Bootstrap primary blue */
+}
+
+/* Or if you want to use your existing blue */
+.blue-icon {
+  color: #337ab7;
+}
+
+
+.btn-outline-primary .bi-pencil-square {
+  color: #337ab7;
+}

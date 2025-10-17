@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms'
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-customer-edit',
@@ -23,7 +22,258 @@ export class CustomerEdit implements OnInit {
   isLoading = false;
   isSubmitting = false;
 
-  // Dummy data for dropdowns (same as create)
+  // Use the same data structure as customer-index
+  customerData: any = null;
+
+  // Mock data that matches customer-index structure
+  mockCustomers = [
+    {
+      ID: '2261',
+      CompanyCode: 'GH001',
+      CompanyName: 'GreenHill Laboratories',
+      PO: 'No',
+      AccountType: 'IA',
+      Suburb: 'Hilton',
+      AssignedTo: 'Shafieka Moosa',
+      CreatedBy: 'Shafieka Moosa',
+      LastComment: 'Hi Shafieka I am so so sorry to do this to you again!',
+      NextStep: 'None',
+      NextStepOther: '',
+      Archive: '',
+      // Additional fields for the form
+      registeredCompanyName: 'GreenHill Laboratories Ltd',
+      prevCompanyName: 'GreenHill Pharma',
+      accountNumber: 'ACC-2261',
+      addressLine1: '123 Science Park',
+      addressLine2: 'Building A',
+      addressLine3: 'Research Wing',
+      suburb: 'Hilton',
+      city: 'Cape Town',
+      area: 'Western Cape',
+      country: 'South Africa',
+      postalCode: '8001',
+      telephone: '+27-21-555-0123',
+      altPhone: '+27-21-555-0124',
+      fax: '+27-21-555-0125',
+      listing: ['healthcare'],
+      industryType: ['healthcare'],
+      serviceType: ['consulting'],
+      finAddressLine1: '456 Finance Street',
+      finAddressLine2: 'Floor 3',
+      finAddressLine3: 'Accounting Dept',
+      finSuburb: 'Financial District',
+      finCity: 'Cape Town',
+      finPostalCode: '8001',
+      finRegion: 'Western Cape',
+      finCountry: 'South Africa',
+      finTelephone: '+27-21-555-0126',
+      finFax: '+27-21-555-0127',
+      vat: 'ZA123456789',
+      website: 'https://www.greenhill-labs.com',
+      assignedTo: 'shafieka_moosa',
+      product: ['product_a'],
+      zone: 'south',
+      posAddress1: 'PO Box 123',
+      posAddress2: 'Mail Center',
+      posAddress3: '',
+      posSuburb: 'Hilton',
+      posCity: 'Cape Town',
+      posZipCode: '8001',
+      posRegion: 'Western Cape',
+      posCountry: 'South Africa',
+      poRequired: 'yes',
+      accountType: 'standard',
+      region: 'region_1',
+      gps: '-33.9249,18.4241',
+      remark: 'Medical laboratory services provider',
+      flag: 'ACTIVE'
+    },
+    {
+      ID: '2258',
+      CompanyCode: 'SGS001',
+      CompanyName: 'SGS Somerset',
+      PO: 'No',
+      AccountType: 'IA',
+      Suburb: 'Somerset West',
+      AssignedTo: 'Shafieka Moosa',
+      CreatedBy: 'Shafieka Moosa',
+      LastComment: 'Hi Shafieka I am so so sorry to do this to you again!',
+      NextStep: 'None',
+      NextStepOther: '',
+      Archive: '',
+      // Additional fields
+      registeredCompanyName: 'SGS Somerset Pty Ltd',
+      prevCompanyName: '',
+      accountNumber: 'ACC-2258',
+      addressLine1: '789 Industrial Avenue',
+      addressLine2: '',
+      addressLine3: '',
+      suburb: 'Somerset West',
+      city: 'Cape Town',
+      area: 'Western Cape',
+      country: 'South Africa',
+      postalCode: '7130',
+      telephone: '+27-21-555-0133',
+      altPhone: '',
+      fax: '',
+      listing: ['corporate'],
+      industryType: ['manufacturing'],
+      serviceType: ['support'],
+      finAddressLine1: '789 Finance Road',
+      finAddressLine2: '',
+      finAddressLine3: '',
+      finSuburb: 'Somerset West',
+      finCity: 'Cape Town',
+      finPostalCode: '7130',
+      finRegion: 'Western Cape',
+      finCountry: 'South Africa',
+      finTelephone: '+27-21-555-0134',
+      finFax: '',
+      vat: 'ZA987654321',
+      website: 'https://www.sgs-somerset.com',
+      assignedTo: 'shafieka_moosa',
+      product: ['product_b'],
+      zone: 'south',
+      posAddress1: 'PO Box 456',
+      posAddress2: '',
+      posAddress3: '',
+      posSuburb: 'Somerset West',
+      posCity: 'Cape Town',
+      posZipCode: '7130',
+      posRegion: 'Western Cape',
+      posCountry: 'South Africa',
+      poRequired: 'no',
+      accountType: 'premium',
+      region: 'region_2',
+      gps: '-34.0834,18.8484',
+      remark: 'Quality control and testing services',
+      flag: 'ACTIVE'
+    },
+    {
+      ID: '2256',
+      CompanyCode: 'IN2001',
+      CompanyName: 'in2food Strand',
+      PO: 'No',
+      AccountType: 'IA',
+      Suburb: 'Strand',
+      AssignedTo: 'Shafieka Moosa',
+      CreatedBy: 'Shafieka Moosa',
+      LastComment: 'Hi Shafieka I am so so sorry to do this to you again!',
+      NextStep: 'None',
+      NextStepOther: '',
+      Archive: '',
+      // Additional fields
+      registeredCompanyName: 'in2food Strand Ltd',
+      prevCompanyName: 'Strand Foods',
+      accountNumber: 'ACC-2256',
+      addressLine1: '456 Food Processing Street',
+      addressLine2: 'Factory Floor',
+      addressLine3: '',
+      suburb: 'Strand',
+      city: 'Cape Town',
+      area: 'Western Cape',
+      country: 'South Africa',
+      postalCode: '7140',
+      telephone: '+27-21-555-0143',
+      altPhone: '+27-21-555-0144',
+      fax: '+27-21-555-0145',
+      listing: ['enterprise'],
+      industryType: ['manufacturing'],
+      serviceType: ['implementation'],
+      finAddressLine1: '456 Finance Avenue',
+      finAddressLine2: '',
+      finAddressLine3: '',
+      finSuburb: 'Strand',
+      finCity: 'Cape Town',
+      finPostalCode: '7140',
+      finRegion: 'Western Cape',
+      finCountry: 'South Africa',
+      finTelephone: '+27-21-555-0146',
+      finFax: '',
+      vat: 'ZA456123789',
+      website: 'https://www.in2food-strand.com',
+      assignedTo: 'shafieka_moosa',
+      product: ['product_c'],
+      zone: 'south',
+      posAddress1: 'PO Box 789',
+      posAddress2: '',
+      posAddress3: '',
+      posSuburb: 'Strand',
+      posCity: 'Cape Town',
+      posZipCode: '7140',
+      posRegion: 'Western Cape',
+      posCountry: 'South Africa',
+      poRequired: 'sometimes',
+      accountType: 'enterprise',
+      region: 'region_3',
+      gps: '-34.1167,18.8278',
+      remark: 'Food processing and packaging company',
+      flag: 'ACTIVE'
+    },
+    {
+      ID: '2253',
+      CompanyCode: 'SCI001',
+      CompanyName: 'Scientific Services',
+      PO: 'No',
+      AccountType: 'IA',
+      Suburb: 'Ndabeni',
+      AssignedTo: 'Shafieka Moosa',
+      CreatedBy: 'Shafieka Moosa',
+      LastComment: 'Hi Shafieka I am so so sorry to do this to you again!',
+      NextStep: 'None',
+      NextStepOther: '',
+      Archive: '',
+      // Additional fields
+      registeredCompanyName: 'Scientific Services (Pty) Ltd',
+      prevCompanyName: 'Science Corp',
+      accountNumber: 'ACC-2253',
+      addressLine1: '321 Research Road',
+      addressLine2: 'Laboratory Complex',
+      addressLine3: 'Unit 5',
+      suburb: 'Ndabeni',
+      city: 'Cape Town',
+      area: 'Western Cape',
+      country: 'South Africa',
+      postalCode: '7405',
+      telephone: '+27-21-555-0153',
+      altPhone: '+27-21-555-0154',
+      fax: '+27-21-555-0155',
+      listing: ['corporate', 'enterprise'],
+      industryType: ['technology', 'healthcare'],
+      serviceType: ['consulting', 'training'],
+      finAddressLine1: '321 Finance Boulevard',
+      finAddressLine2: 'Suite 200',
+      finAddressLine3: '',
+      finSuburb: 'Ndabeni',
+      finCity: 'Cape Town',
+      finPostalCode: '7405',
+      finRegion: 'Western Cape',
+      finCountry: 'South Africa',
+      finTelephone: '+27-21-555-0156',
+      finFax: '+27-21-555-0157',
+      vat: 'ZA789456123',
+      website: 'https://www.scientific-services.com',
+      assignedTo: 'shafieka_moosa',
+      product: ['product_a', 'product_d'],
+      zone: 'central',
+      posAddress1: 'PO Box 321',
+      posAddress2: '',
+      posAddress3: '',
+      posSuburb: 'Ndabeni',
+      posCity: 'Cape Town',
+      posZipCode: '7405',
+      posRegion: 'Western Cape',
+      posCountry: 'South Africa',
+      poRequired: 'yes',
+      accountType: 'vip',
+      region: 'region_4',
+      gps: '-33.9236,18.5132',
+      remark: 'Scientific research and development services',
+      flag: 'VIP_CUSTOMER'
+    }
+  ];
+
+  // Dummy data for dropdowns
   listings: any[] = [
     { value: 'corporate', text: 'Corporate' },
     { value: 'small_business', text: 'Small Business' },
@@ -52,6 +302,7 @@ export class CustomerEdit implements OnInit {
   ];
 
   assignedToUsers: any[] = [
+    { value: 'shafieka_moosa', text: 'Shafieka Moosa' },
     { value: 'john_doe', text: 'John Doe' },
     { value: 'jane_smith', text: 'Jane Smith' },
     { value: 'mike_wilson', text: 'Mike Wilson' },
@@ -117,14 +368,15 @@ export class CustomerEdit implements OnInit {
 
     // Simulate API call to get customer data
     setTimeout(() => {
-      const customerData = this.getCustomerById(this.customerId);
+      this.customerData = this.getCustomerById(this.customerId);
 
-      if (customerData) {
-        this.customerForm.patchValue(customerData);
-        this.parseGPSData(customerData.gps);
-        console.log('Customer data loaded:', customerData);
+      if (this.customerData) {
+        // Map the customer data to form fields
+        this.mapCustomerDataToForm(this.customerData);
+        this.parseGPSData(this.customerData.gps);
+        console.log('Customer data loaded:', this.customerData);
       } else {
-        console.error('Customer not found');
+        console.error('Customer not found for ID:', this.customerId);
         alert('Customer not found!');
         this.router.navigate(['/customers']);
       }
@@ -134,61 +386,79 @@ export class CustomerEdit implements OnInit {
   }
 
   private getCustomerById(id: string): any {
-    // Mock data - in real app, this would come from API
-    const mockCustomers = {
-      '1': {
-        companyCode: 'COMP001',
-        companyName: 'Tech Solutions Inc.',
-        registeredCompanyName: 'Tech Solutions Incorporated',
-        prevCompanyName: 'Tech Innovations LLC',
-        accountNumber: 'ACC-2024-001',
-        addressLine1: '123 Main Street',
-        addressLine2: 'Suite 500',
-        addressLine3: 'Tech Park',
-        suburb: 'Downtown',
-        city: 'San Francisco',
-        area: 'Bay Area',
-        country: 'United States',
-        postalCode: '94105',
-        telephone: '+1-555-0123',
-        altPhone: '+1-555-0124',
-        fax: '+1-555-0125',
-        listing: ['corporate', 'enterprise'],
-        industryType: ['technology', 'finance'],
-        serviceType: ['consulting', 'implementation'],
-        finAddressLine1: '456 Finance Avenue',
-        finAddressLine2: 'Floor 10',
-        finAddressLine3: 'Financial District',
-        finSuburb: 'Financial Center',
-        finCity: 'San Francisco',
-        finPostalCode: '94104',
-        finRegion: 'California',
-        finCountry: 'United States',
-        finTelephone: '+1-555-0126',
-        finFax: '+1-555-0127',
-        vat: 'US123456789',
-        website: 'https://www.techsolutions.com',
-        assignedTo: 'john_doe',
-        product: ['product_a', 'product_c'],
-        zone: 'north',
-        posAddress1: '789 Postal Street',
-        posAddress2: 'PO Box 123',
-        posAddress3: 'Mail Center',
-        posSuburb: 'Postal District',
-        posCity: 'San Francisco',
-        posZipCode: '94106',
-        posRegion: 'California',
-        posCountry: 'United States',
-        poRequired: 'yes',
-        accountType: 'enterprise',
-        region: 'region_1',
-        gps: '37.7749,-122.4194',
-        remark: 'This is a premium enterprise customer with special requirements.',
-        flag: 'VIP_CUSTOMER'
-      }
+    return this.mockCustomers.find(customer => customer.ID === id) || null;
+  }
+
+  private mapCustomerDataToForm(customerData: any): void {
+    // Map the customer data to form field names
+    const formData = {
+      // Company Information
+      companyCode: customerData.CompanyCode,
+      companyName: customerData.CompanyName,
+      registeredCompanyName: customerData.registeredCompanyName,
+      prevCompanyName: customerData.prevCompanyName,
+      accountNumber: customerData.accountNumber,
+
+      // Physical Address
+      addressLine1: customerData.addressLine1,
+      addressLine2: customerData.addressLine2,
+      addressLine3: customerData.addressLine3,
+      suburb: customerData.suburb,
+      city: customerData.city,
+      area: customerData.area,
+      country: customerData.country,
+      postalCode: customerData.postalCode,
+
+      // Contact Information
+      telephone: customerData.telephone,
+      altPhone: customerData.altPhone,
+      fax: customerData.fax,
+
+      // Dropdown Selections
+      listing: customerData.listing || [],
+      industryType: customerData.industryType || [],
+      serviceType: customerData.serviceType || [],
+
+      // Financial Address
+      finAddressLine1: customerData.finAddressLine1,
+      finAddressLine2: customerData.finAddressLine2,
+      finAddressLine3: customerData.finAddressLine3,
+      finSuburb: customerData.finSuburb,
+      finCity: customerData.finCity,
+      finPostalCode: customerData.finPostalCode,
+      finRegion: customerData.finRegion,
+      finCountry: customerData.finCountry,
+      finTelephone: customerData.finTelephone,
+      finFax: customerData.finFax,
+      vat: customerData.vat,
+      website: customerData.website,
+
+      // Assigned Fields
+      assignedTo: customerData.assignedTo,
+      product: customerData.product || [],
+      zone: customerData.zone,
+
+      // Postal Address
+      posAddress1: customerData.posAddress1,
+      posAddress2: customerData.posAddress2,
+      posAddress3: customerData.posAddress3,
+      posSuburb: customerData.posSuburb,
+      posCity: customerData.posCity,
+      posZipCode: customerData.posZipCode,
+      posRegion: customerData.posRegion,
+      posCountry: customerData.posCountry,
+
+      // PO Required Section
+      poRequired: customerData.poRequired,
+      accountType: customerData.accountType,
+      region: customerData.region,
+
+      // Additional Information
+      remark: customerData.remark,
+      flag: customerData.flag
     };
 
-    return mockCustomers[id as keyof typeof mockCustomers] || null;
+    this.customerForm.patchValue(formData);
   }
 
   private parseGPSData(gpsValue: string): void {
@@ -197,48 +467,13 @@ export class CustomerEdit implements OnInit {
       return;
     }
 
-    const coordinates = gpsValue.trim().replace(',', ' ').split(' ');
-
-    // Determine GPS format based on coordinate structure
-    if (coordinates.length <= 2) {
-      // DD format
+    // Simple parsing for DD format (latitude,longitude)
+    if (gpsValue.includes(',')) {
+      const [lat, long] = gpsValue.split(',');
       this.gpsFormat = 'DD';
       this.customerForm.patchValue({
-        ddLatitude: coordinates[0],
-        ddLongitude: coordinates[1]
-      });
-    } else if (coordinates.length <= 6) {
-      // DM format
-      this.gpsFormat = 'DM';
-
-      // Parse direction indicators
-      const ns = coordinates.includes('N') ? 'N' : 'S';
-      const ew = coordinates.includes('E') ? 'E' : 'W';
-
-      this.customerForm.patchValue({
-        dmNorthSouth: ns,
-        dmLatitudeDegrees: coordinates[1],
-        dmLatitudeMinutes: coordinates[2],
-        dmEastWest: ew,
-        dmLongitudeDegrees: coordinates[4],
-        dmLongitudeMinutes: coordinates[5]
-      });
-    } else if (coordinates.length <= 8) {
-      // DMS format
-      this.gpsFormat = 'DMS';
-
-      const ns = coordinates.includes('N') ? 'N' : 'S';
-      const ew = coordinates.includes('E') ? 'E' : 'W';
-
-      this.customerForm.patchValue({
-        dmsNorthSouth: ns,
-        dmsLatitudeDegrees: coordinates[1],
-        dmsLatitudeMinutes: coordinates[2],
-        dmsLatitudeSeconds: coordinates[3],
-        dmsEastWest: ew,
-        dmsLongitudeDegrees: coordinates[5],
-        dmsLongitudeMinutes: coordinates[6],
-        dmsLongitudeSeconds: coordinates[7]
+        ddLatitude: lat.trim(),
+        ddLongitude: long.trim()
       });
     }
   }
@@ -684,7 +919,7 @@ export class CustomerEdit implements OnInit {
     alert(`Would navigate to communication for customer ${id}`);
   }
 
-  // File type and size methods (same as create)
+  // File type and size methods
   getFileType(filename: string): string {
     if (!filename) return 'Unknown';
 
@@ -715,5 +950,10 @@ export class CustomerEdit implements OnInit {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // Go back to list
+  goBackToList(): void {
+    this.router.navigate(['/customers']);
   }
 }

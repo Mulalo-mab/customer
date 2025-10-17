@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ColDef, GridReadyEvent, GridOption } from 'ag-grid-community';
-import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import { Component, AfterViewInit } from '@angular/core';
+import { ColDef, ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { Router } from '@angular/router';
-import { AgGridAngular } from 'ag-grid-angular';
 
+// Register AG Grid modules
 ModuleRegistry.registerModules([AllCommunityModule]);
-
 
 @Component({
   selector: 'app-customer-index',
@@ -13,304 +11,270 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './customer-index.html',
   styleUrl: './customer-index.css'
 })
-
-
-
-
-export class CustomerIndex implements OnInit {
-
-  @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
-
-  // Grid configuration
-  gridOptions: GridOptions = {
-    rowSelection: 'multiple',
-    suppressRowClickSelection: false,
-    enableCellTextSelection: true,
-    ensureDomOrder: true,
-    getRowHeight: (params: any) => {
-      if (params.data?.lastComment && params.data.lastComment.length > 100) {
-        return 80;
-      }
-      return 40;
-    }
-  };
-
-  // Grid data and configuration
-  gridData: any[] = [];
-  columnDefs: ColDef[] = [];
-  defaultColDef: ColDef = {
-    sortable: true,
-    filter: true,
-    resizable: true,
-    minWidth: 100,
-    flex: 1,
-    cellStyle: {
-      'border-right': '1px solid #ddd',
-      'font-size': '12px',
-      'padding': '4px 8px'
-    },
-    headerClass: 'ag-header-custom'
-  };
-
-  // Search and filter
-  searchTerm: string = '';
-  selectedStatus: string = '';
-  selectedAssignedTo: string = '';
-
-  // Loading state
-  isLoading: boolean = false;
-
-  // Filter options
-  statuses: any[] = [
-    { value: '', text: 'All Statuses' },
-    { value: 'Active', text: 'Active' },
-    { value: 'Pending', text: 'Pending' },
-    { value: 'Completed', text: 'Completed' }
-  ];
-
-  assignedToOptions: any[] = [
-    { value: '', text: 'All Users' },
-    { value: 'Shafeka Moosa', text: 'Shafeka Moosa' },
-    { value: 'John Smith', text: 'John Smith' },
-    { value: 'Sarah Johnson', text: 'Sarah Johnson' }
-  ];
+export class CustomerIndex implements AfterViewInit {
 
   constructor(private router: Router) { }
 
-  ngOnInit(): void {
-    this.initializeGrid();
-    this.loadCustomers();
-  }
+  // Add missing property
+  showActive = true;
 
-  private initializeGrid(): void {
-    this.columnDefs = [
-      {
-        headerName: 'Edit ID',
-        field: 'editId',
-        width: 80,
-        cellRenderer: this.editIdRenderer.bind(this),
-        cellStyle: { 'text-align': 'center', 'font-weight': 'bold' }
-      },
-      {
-        headerName: 'Company Code',
-        field: 'companyCode',
-        width: 120,
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Company Name',
-        field: 'companyName',
-        width: 200,
-        filter: 'agTextColumnFilter',
-        cellStyle: { 'font-weight': 'bold' }
-      },
-      {
-        headerName: 'PO',
-        field: 'po',
-        width: 60,
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Account Type',
-        field: 'accountType',
-        width: 100,
-        filter: 'agSetColumnFilter',
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Suburb',
-        field: 'suburb',
-        width: 120,
-        filter: 'agSetColumnFilter',
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Assigned To',
-        field: 'assignedTo',
-        width: 140,
-        filter: 'agSetColumnFilter',
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Created By',
-        field: 'createdBy',
-        width: 140,
-        filter: 'agSetColumnFilter',
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Last Comment',
-        field: 'lastComment',
-        width: 300,
-        filter: 'agTextColumnFilter',
-        cellRenderer: this.commentRenderer.bind(this),
-        autoHeight: true,
-        wrapText: true,
-        cellStyle: {
-          'white-space': 'normal',
-          'line-height': '1.4'
-        }
-      },
-      {
-        headerName: 'Next Step',
-        field: 'nextStep',
-        width: 180,
-        filter: 'agSetColumnFilter',
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Next Step Other',
-        field: 'nextStepOther',
-        width: 140,
-        filter: 'agTextColumnFilter',
-        cellStyle: { 'text-align': 'center' }
-      },
-      {
-        headerName: 'Archive',
-        field: 'archive',
-        width: 80,
-        cellRenderer: this.archiveRenderer.bind(this),
-        cellStyle: { 'text-align': 'center' }
-      }
-    ];
-  }
+  // Page selection properties
+  selectedPage: number = 5;
+  pageOptions: number[] = [1, 2, 3, 4, 5];
+  searchTerm: string = '';
 
-  private loadCustomers(): void {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.gridData = this.generateMockCustomers();
-      this.isLoading = false;
-    }, 1000);
-  }
+  // Pagination properties
+  currentPage: number = 1;
+  totalPages: number = 5;
+  visiblePages: number[] = [1, 2, 3, 4, 5];
 
-  private generateMockCustomers(): any[] {
-    return [
-      {
-        id: '1',
-        editId: 2261,
-        companyCode: '',
-        companyName: 'Greenhill Laboratories (Shaun)',
-        po: 'No',
-        accountType: 'IA',
-        suburb: 'Hilton',
-        assignedTo: 'Shafeka Moosa',
-        createdBy: 'Shafeka Moosa',
-        lastComment: 'Hi Shafeka I am so so sorry to do this to you again! I completely forgot about an off-site all day event today, so we won\'t be available this afternoon. Please accept my apologies!',
-        nextStep: 'None',
-        nextStepOther: '',
-        archive: 'Active'
+  // AG Grid API
+  private gridApi!: GridApi;
+
+  // Original data and filtered data
+  originalData = [
+    { Edit: '', ID: '2261', CompanyCode: '', CompanyName: 'GreenHill Laboratories', PO: 'No', AccountType: 'IA', Suburb: 'Hilton', AssignedTo: 'Shafieka Moosa', CreatedBy: 'Shafieka Moosa', LastComment: 'Hi Shafieka I am so so sorry to do this to you again!', NextStep: 'None', NextStepOther: '', Archive: '' },
+    { Edit: '', ID: '2258', CompanyCode: '', CompanyName: 'SGS Somerset', PO: 'No', AccountType: 'IA', Suburb: 'Somerset West', AssignedTo: 'Shafieka Moosa', CreatedBy: 'Shafieka Moosa', LastComment: 'Hi Shafieka I am so so sorry to do this to you again!', NextStep: 'None', NextStepOther: '', Archive: '' },
+    { Edit: '', ID: '2256', CompanyCode: '', CompanyName: 'in2food Strand', PO: 'No', AccountType: 'IA', Suburb: 'Strand', AssignedTo: 'Shafieka Moosa', CreatedBy: 'Shafieka Moosa', LastComment: 'Hi Shafieka I am so so sorry to do this to you again!', NextStep: 'None', NextStepOther: '', Archive: '' },
+    { Edit: '', ID: '2253', CompanyCode: '', CompanyName: 'Scientific Services', PO: 'No', AccountType: 'IA', Suburb: 'Ndabeni', AssignedTo: 'Shafieka Moosa', CreatedBy: 'Shafieka Moosa', LastComment: 'Hi Shafieka I am so so sorry to do this to you again!', NextStep: 'None', NextStepOther: '', Archive: '' }
+  ];
+
+  rowData = [...this.originalData]; // Start with all data
+
+  colDefs: ColDef[] = [
+    {
+      field: "Edit",
+      cellRenderer: () => {
+        return '<button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square text-primary"></i></button>';
       },
-      {
-        id: '2',
-        editId: 2258,
-        companyCode: '',
-        companyName: 'SGS Somerset',
-        po: 'No',
-        accountType: 'IA',
-        suburb: 'Somerset West',
-        assignedTo: 'Shafeka Moosa',
-        createdBy: 'Shafeka Moosa',
-        lastComment: 'On 07 July 2025. I received a call from Michael. We had a discussion regarding the costing, required deposit, monthly fee and annual costs. I answered all questions and it was clearly understood.',
-        nextStep: 'Follow Up Review On Last Email Sent',
-        nextStepOther: '',
-        archive: 'Active'
+      onCellClicked: (event) => {
+        this.onEditClick(event.data);
       },
-      {
-        id: '3',
-        editId: 2256,
-        companyCode: '',
-        companyName: 'InZfood Strand',
-        po: 'No',
-        accountType: 'IA',
-        suburb: 'Strand',
-        assignedTo: 'Shafeka Moosa',
-        createdBy: 'Shafeka Moosa',
-        lastComment: '',
-        nextStep: '',
-        nextStepOther: '',
-        archive: 'Active'
+      width: 80
+    },
+    { field: "ID", width: 100 },
+    { field: "CompanyCode", headerName: "Company Code", width: 150 },
+    { field: "CompanyName", headerName: "Company Name", width: 200 },
+    { field: "PO", width: 100 },
+    { field: "AccountType", headerName: "Account Type", width: 130 },
+    { field: "Suburb", width: 150 },
+    { field: "AssignedTo", headerName: "Assigned To", width: 150 },
+    { field: "CreatedBy", headerName: "Created By", width: 150 },
+    { field: "LastComment", headerName: "Last Comment", width: 250 },
+    { field: "NextStep", headerName: "Next Step", width: 120 },
+    { field: "NextStepOther", headerName: "Next Step Other", width: 150 },
+    {
+      field: "Archive",
+      cellRenderer: () => {
+        return '<button class="btn btn-sm btn-outline-danger"> Archive</button>';
       },
-      {
-        id: '4',
-        editId: 2253,
-        companyCode: '',
-        companyName: 'Scientific Services',
-        po: 'No',
-        accountType: 'IA',
-        suburb: 'Ndabeni',
-        assignedTo: 'Shafeka Moosa',
-        createdBy: 'Shafeka Moosa',
-        lastComment: 'Please see latest email update to Sandisive, 13 October 2025. Good morning Sandisive, I hope you well and had a wonderful weekend. I just wanted to follow up to see if there are any updates',
-        nextStep: 'Follow Up Review On Last Email Sent',
-        nextStepOther: '',
-        archive: 'Active'
-      }
-    ];
-  }
-
-  // Custom cell renderers
-  editIdRenderer(params: any): string {
-    if (!params.value) return '';
-    return `<div style="color: #007bff; cursor: pointer; text-decoration: underline;">${params.value}</div>`;
-  }
-
-  commentRenderer(params: any): string {
-    if (!params.value) return '';
-    return `<div style="white-space: normal; line-height: 1.4; padding: 2px 0;">${params.value}</div>`;
-  }
-
-  archiveRenderer(params: any): string {
-    const archive = params.value;
-    if (archive === 'Active') {
-      return `<span class="badge bg-success" style="font-size: 11px; padding: 2px 6px;">${archive}</span>`;
+      onCellClicked: (event) => {
+        this.onArchiveClick(event.data);
+      },
+      width: 120
     }
-    return '';
+  ];
+
+  // Implement ngAfterViewInit
+  ngAfterViewInit() {
+    this.initializeToggleSwitch();
+    this.updateVisiblePages(); // Initialize pagination pages
   }
 
-  // Grid event handlers
-  onGridReady(params: GridReadyEvent): void {
-    console.log('AG Grid ready');
-    setTimeout(() => {
-      params.api.sizeColumnsToFit();
-    }, 100);
+  // AG Grid ready event
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
   }
 
-  onRowDoubleClicked(event: any): void {
-    const customer = event.data;
-    this.editCustomer(customer);
-  }
+  initializeToggleSwitch() {
+    const toggleCheckbox = document.getElementById('IsActive') as HTMLInputElement;
+    if (toggleCheckbox) {
+      toggleCheckbox.addEventListener('change', (event) => {
+        this.showActive = (event.target as HTMLInputElement).checked;
+        this.updateToggleVisualState();
+        this.filterCustomersByStatus(this.showActive);
+      });
 
-  onCellClicked(event: any): void {
-    if (event.colDef.field === 'editId') {
-      this.editCustomer(event.data);
+      // Set initial state
+      this.updateToggleVisualState();
     }
   }
 
-  // Search and filter methods
-  onSearch(): void {
+  // SEARCH FUNCTIONALITY - FIXED
+  onSearch() {
     console.log('Searching for:', this.searchTerm);
+
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+      // If search is empty, show all data
+      this.rowData = [...this.originalData];
+    } else {
+      // Filter data based on company name
+      const searchTermLower = this.searchTerm.toLowerCase().trim();
+      this.rowData = this.originalData.filter(customer =>
+        customer.CompanyName.toLowerCase().includes(searchTermLower)
+      );
+    }
+
+    // Update the grid with filtered data - FIXED METHOD
+    if (this.gridApi) {
+      // Method 1: Using setGridOption (recommended for newer AG Grid versions)
+      this.gridApi.setGridOption('rowData', this.rowData);
+
+      // Alternative method: If the above doesn't work, use this:
+      // this.gridApi.applyTransaction({ update: this.rowData });
+    }
+
+    // Update pagination based on filtered results
+    this.updatePaginationAfterSearch();
   }
 
-  clearSearch(): void {
+  // Clear search
+  onClearSearch() {
     this.searchTerm = '';
-    this.onSearch();
+    this.rowData = [...this.originalData];
+
+    if (this.gridApi) {
+      this.gridApi.setGridOption('rowData', this.rowData);
+    }
+
+    this.updatePaginationAfterSearch();
+    console.log('Search cleared');
   }
 
-  onFilterChange(): void {
-    this.onSearch();
+  // Handle search input keypress (Enter key)
+  onSearchKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.onSearch();
+    }
   }
 
-  // Action methods
-  goToCreate() {
-    this.router.navigate(['/customer/create']);
+  // Update pagination after search
+  private updatePaginationAfterSearch() {
+    const filteredCount = this.rowData.length;
+    const totalCount = this.originalData.length;
+
+    console.log(`Search results: ${filteredCount} of ${totalCount} companies found`);
+
+    // You can update pagination here based on filtered results
+    this.currentPage = 1; // Reset to first page after search
+    this.updateVisiblePages();
   }
 
-  editCustomer(customer: any): void {
-    console.log('Editing customer:', customer);
-    this.router.navigate(['/customer/edit', customer.id]);
+  // Enhanced filter that combines search and status
+  filterCustomersByStatus(showActive: boolean) {
+    console.log('Filtering by status:', showActive ? 'Active' : 'Archive');
+
+    // First apply search filter if there's a search term
+    let filteredData = [...this.originalData];
+
+    if (this.searchTerm && this.searchTerm.trim() !== '') {
+      const searchTermLower = this.searchTerm.toLowerCase().trim();
+      filteredData = filteredData.filter(customer =>
+        customer.CompanyName.toLowerCase().includes(searchTermLower)
+      );
+    }
+
+    // Then apply status filter (you can modify this based on your Archive field logic)
+    if (showActive) {
+      // Show active customers (assuming Archive field empty means active)
+      this.rowData = filteredData.filter(customer => !customer.Archive || customer.Archive === '');
+    } else {
+      // Show archived customers
+      this.rowData = filteredData.filter(customer => customer.Archive && customer.Archive !== '');
+    }
+
+    // Update the grid - FIXED METHOD
+    if (this.gridApi) {
+      this.gridApi.setGridOption('rowData', this.rowData);
+    }
+
+    this.updatePaginationAfterSearch();
   }
 
-  refreshData(): void {
-    this.loadCustomers();
+  // Pagination methods
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.selectedPage = page; // Sync with the page selector
+      this.updateVisiblePages();
+      this.loadPageData(page);
+    }
+  }
+
+  updateVisiblePages() {
+    // Show pages around current page (you can customize this logic)
+    const startPage = Math.max(1, this.currentPage - 2);
+    const endPage = Math.min(this.totalPages, this.currentPage + 2);
+
+    this.visiblePages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      this.visiblePages.push(i);
+    }
+  }
+
+  loadPageData(pageNumber: number) {
+    console.log('Loading data for page:', pageNumber);
+    // Add your actual pagination logic here
+    // Example: this.customerService.getCustomers(pageNumber, this.pageSize).subscribe(...);
+  }
+
+  updateToggleVisualState() {
+    const toggleCheckbox = document.getElementById('IsActive') as HTMLInputElement;
+    const toggleGroup = document.querySelector('.toggle-group') as HTMLElement;
+
+    if (toggleCheckbox && toggleGroup) {
+      if (this.showActive) {
+        toggleGroup.style.left = '0';
+        toggleCheckbox.checked = true;
+      } else {
+        toggleGroup.style.left = '-100%';
+        toggleCheckbox.checked = false;
+      }
+    }
+  }
+
+  onToggleClick() {
+    this.showActive = !this.showActive;
+    this.updateToggleVisualState();
+    this.filterCustomersByStatus(this.showActive);
+  }
+
+  onEditClick(customerData: any) {
+    console.log('Edit customer:', customerData);
+    this.router.navigate(['/customers/edit', customerData.ID]);
+  }
+
+  onArchiveClick(customerData: any) {
+    console.log('Archive customer:', customerData);
+
+    // Show confirmation dialog
+    if (confirm(`Are you sure you want to archive ${customerData.CompanyName}?`)) {
+      // Add your archive logic here
+      this.archiveCustomer(customerData.ID);
+    }
+  }
+
+  onPageChange() {
+    console.log('Selected page:', this.selectedPage);
+    this.goToPage(this.selectedPage);
+  }
+
+  archiveCustomer(customerId: string) {
+    // Here you would typically call a service to archive the customer
+    console.log(`Archiving customer with ID: ${customerId}`);
+
+    // Example: Update the rowData to show it's archived
+    const customerIndex = this.originalData.findIndex(customer => customer.ID === customerId);
+    if (customerIndex !== -1) {
+      // You can update the customer data here, or remove it from the list
+      // For example, change the Archive field to show it's archived
+      this.originalData[customerIndex].Archive = 'Archived';
+
+      // Refresh the grid data
+      this.filterCustomersByStatus(this.showActive);
+
+      // Show success message
+      alert('Customer archived successfully!');
+    }
   }
 }

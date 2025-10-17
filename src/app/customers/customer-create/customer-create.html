@@ -8,30 +8,29 @@
       </div>
 
 
-      <div class="panel-body" style="padding: 15px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; display: block; unicode-bidi: isolate;">
-        <ul class="nav nav-tabs" style="border-bottom: 1px solid #ddd; padding-left: 0; margin-bottom: 0; list-style: none; margin-top: 0; margin-bottom: 10px; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; display: block; list-style-type: disc; margin-block-start: 1em; margin-block-end: 1em; padding-inline-start: 40px; unicode-bidi: isolate;">
-          <li class="active" style="display: list-item; text-align: -webkit-match-parent;">
-            <a href="#" style="text-decoration: none;">Customer Record</a>
+      <div class="panel-body">
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#">Customer Record</a>
           </li>
         </ul>
         <br>
       </div>
 
 
+
       <div class="tab-content">
         <div class="tab-pane fade in active" style="display: block; visibility: visible; opacity: 1; -webkit-transition: opacity .15s linear; -o-transition: opacity .15s linear; transition: opacity .15s linear; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; display: block; unicode-bidi: isolate;">
 
           <!-- Company Information Section -->
-          <div class="form-group">
-            <label for="companyName" class="control-label col-md-2">
-              Company Name
-            </label>
+          <div class="form-group row">
+            <label for="companyName" class="control-label col-md-2">Company Name</label>
             <div class="col-md-7">
               <input type="text" id="companyName" class="form-control" formControlName="companyName">
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="registeredCompanyName" class="control-label col-md-2">
               Registered Company Name
             </label>
@@ -40,7 +39,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="prevCompanyName" class="control-label col-md-2">
               Previous Name
             </label>
@@ -49,7 +48,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="accountNumber" class="control-label col-md-2">
               Account Number
             </label>
@@ -58,7 +57,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="addressLine1" class="control-label col-md-2">
               Physical Address Line 1
             </label>
@@ -67,7 +66,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="addressLine2" class="control-label col-md-2">
               Physical Address Line 2
             </label>
@@ -76,7 +75,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="addressLine3" class="control-label col-md-2">
               Physical Address Line 3
             </label>
@@ -85,7 +84,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="suburb" class="control-label col-md-2">
               Suburb
             </label>
@@ -103,7 +102,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="area" class="control-label col-md-2">
               Area
             </label>
@@ -112,7 +111,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="country" class="control-label col-md-2">
               Country
             </label>
@@ -121,7 +120,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="postalCode" class="control-label col-md-2">
               Postal Code
             </label>
@@ -131,7 +130,7 @@
           </div>
 
           <!-- Contact Information Section -->
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="telephone" class="control-label col-md-2">
               Telephone
             </label>
@@ -140,7 +139,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="altPhone" class="control-label col-md-2">
               Alt Phone
             </label>
@@ -149,7 +148,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="fax" class="control-label col-md-2">
               Fax
             </label>
@@ -159,36 +158,36 @@
           </div>
 
           <!-- Dropdown Section -->
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="listing" class="control-label col-md-2">
               Customer Segment
             </label>
             <div class="col-md-7">
-              <select multiple id="listing" class="form-control" formControlName="listing">
+              <select id="listing" class="form-control custom-dropdown" formControlName="listing">
                 <option value="" disabled>Select customer segments</option>
                 <option *ngFor="let item of listings" [value]="item.value">{{item.text}}</option>
               </select>
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="industryType" class="control-label col-md-2">
               Industry Types
             </label>
             <div class="col-md-7">
-              <select multiple id="industryType" class="form-control" formControlName="industryType">
+              <select id="industryType" class="form-control custom-dropdown" formControlName="industryType">
                 <option value="" disabled>Select industry types</option>
                 <option *ngFor="let item of industryTypes" [value]="item.value">{{item.text}}</option>
               </select>
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="serviceType" class="control-label col-md-2">
               Service Types
             </label>
             <div class="col-md-7">
-              <select multiple id="serviceType" class="form-control" formControlName="serviceType">
+              <select id="serviceType" class="form-control custom-dropdown" formControlName="serviceType">
                 <option value="" disabled>Select service types</option>
                 <option *ngFor="let item of serviceTypes" [value]="item.value">{{item.text}}</option>
               </select>
@@ -196,7 +195,7 @@
           </div>
 
           <!-- Financial Address Section -->
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finAddressLine1" class="control-label col-md-2">
               Financial Address Line 1
             </label>
@@ -205,7 +204,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finAddressLine2" class="control-label col-md-2">
               Financial Address Line 2
             </label>
@@ -214,7 +213,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finAddressLine3" class="control-label col-md-2">
               Financial Address Line 3
             </label>
@@ -223,7 +222,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finSuburb" class="control-label col-md-2">
               Financial Suburb
             </label>
@@ -232,7 +231,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finCity" class="control-label col-md-2">
               Financial City
             </label>
@@ -241,7 +240,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finPostalCode" class="control-label col-md-2">
               Financial Postal Code
             </label>
@@ -250,7 +249,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finRegion" class="control-label col-md-2">
               Financial Region
             </label>
@@ -259,7 +258,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finCountry" class="control-label col-md-2">
               Financial Country
             </label>
@@ -268,7 +267,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finTelephone" class="control-label col-md-2">
               Financial Phone
             </label>
@@ -277,7 +276,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="finFax" class="control-label col-md-2">
               Financial Fax
             </label>
@@ -286,7 +285,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="vat" class="control-label col-md-2">
               VAT Reg #
             </label>
@@ -295,7 +294,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="website" class="control-label col-md-2">
               Website
             </label>
@@ -305,7 +304,7 @@
           </div>
 
           <!-- Assigned Section -->
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="assignedTo" class="control-label col-md-2">
               Assigned To
             </label>
@@ -317,19 +316,19 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group">
             <label for="product" class="control-label col-md-2">
               Product
             </label>
             <div class="col-md-7">
-              <select multiple id="product" class="form-control" formControlName="product">
+              <select id="product" class="form-control custom-dropdown" formControlName="product">
                 <option value="" disabled>Select products</option>
                 <option *ngFor="let item of products" [value]="item.value">{{item.text}}</option>
               </select>
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="zone" class="control-label col-md-2">
               Zone
             </label>
@@ -342,7 +341,7 @@
           </div>
 
           <!-- Postal Address Section -->
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posAddress1" class="control-label col-md-2">
               Postal Address Line 1
             </label>
@@ -351,7 +350,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posAddress2" class="control-label col-md-2">
               Postal Address Line 2
             </label>
@@ -360,7 +359,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posAddress3" class="control-label col-md-2">
               Postal Address Line 3
             </label>
@@ -369,7 +368,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posSuburb" class="control-label col-md-2">
               Postal Suburb
             </label>
@@ -378,7 +377,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posCity" class="control-label col-md-2">
               Postal City
             </label>
@@ -387,7 +386,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posZipCode" class="control-label col-md-2">
               Postal Code
             </label>
@@ -396,7 +395,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posRegion" class="control-label col-md-2">
               Postal Province
             </label>
@@ -405,7 +404,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="posCountry" class="control-label col-md-2">
               Postal Country
             </label>
@@ -415,7 +414,7 @@
           </div>
 
           <!-- PO Required Section -->
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="poRequired" class="control-label col-md-2">
               PO Required?
             </label>
@@ -427,7 +426,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="accountType" class="control-label col-md-2">
               Account Type
             </label>
@@ -439,7 +438,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="region" class="control-label col-md-2">
               Region
             </label>
@@ -452,7 +451,7 @@
           </div>
 
           <!-- GPS Section -->
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label for="gps" class="control-label col-md-2">
               GPS
             </label>
@@ -461,7 +460,7 @@
             </div>
           </div>
 
-          <div class="form-group row mb-3">
+          <div class="form-group row">
             <label class="control-label col-md-2">
               GPS Format
             </label>
@@ -738,18 +737,19 @@
 
           <!-- Submit Buttons -->
           <div class="form-group row mb-3">
-            <div class="col-sm-6 offset-sm-3">
+            <label class="control-label col-md-2"></label> <!-- aligns with form labels -->
+            <div class="col-md-7">
               <button type="submit" class="btn btn-primary me-2" [disabled]="customerForm.invalid">
                 Create
               </button>
-              <button type="button" class="btn btn-secondary me-2" (click)="customerForm.reset()">
-                Clear
-              </button>
-              <button type="button" class="btn btn-outline-secondary" (click)="goBackToList()">
-                Back to List
-              </button>
+              <!--<button type="button" class="btn btn-secondary me-2" (click)="customerForm.reset()">
+    Clear
+  </button>-->
             </div>
           </div>
+
+
+
         </div>
       </div>
 
@@ -757,4 +757,15 @@
     </div>
 
   </form>
+
+  <div class="row mb-2">
+    <div class="col">
+      <p class="mb-0">
+        <button type="button" class="create-new-link btn-style-override" (click)="goBackToList()">
+          Back to List
+        </button>
+      </p>
+    </div>
+  </div>
+
 </div>
