@@ -11,6 +11,12 @@ import { CustomerCreate } from './customers/customer-create/customer-create';
 import { CustomerEdit } from './customers/customer-edit/customer-edit';
 import { CustomerIndex } from './customers/customer-index/customer-index';
 import { EditButton } from './customers/customer-index/edit-button/edit-button';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+
+
 
 @NgModule({
   declarations: [
@@ -26,6 +32,10 @@ import { EditButton } from './customers/customer-index/edit-button/edit-button';
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
+    NgSelectModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
     AppRoutingModule
   ],
   providers: [

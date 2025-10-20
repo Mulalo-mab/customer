@@ -45,7 +45,12 @@ export class CustomerIndex implements AfterViewInit {
     {
       field: "Edit",
       cellRenderer: () => {
-        return '<button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square text-primary"></i></button>';
+        return `
+      <button class="btn btn-sm edit-btn glyphicon"
+                style="background-color: white; color: #337ab7; border: 1px solid #337ab7; border-radius: 0.25rem; cursor: pointer; transition: all 0.2s; padding: 0.15rem 0.5rem; position: relative; display: inline-block; font-family: 'Glyphicons Halflings'; font-style: normal; font-weight: normal; line-height: 1;">
+          <i class="bi bi-pencil-square" style="color: #337ab7; position: relative; top: 1px;"></i>
+        </button>
+    `;
       },
       onCellClicked: (event) => {
         this.onEditClick(event.data);
@@ -66,7 +71,7 @@ export class CustomerIndex implements AfterViewInit {
     {
       field: "Archive",
       cellRenderer: () => {
-        return '<button class="btn btn-sm btn-outline-danger"> Archive</button>';
+        return '<button class="btn btn-sm " style="border-color: #323ea8; background-color: #337ab7; color: white; padding: 0.15rem 0.5rem;">Archive</button>';
       },
       onCellClicked: (event) => {
         this.onArchiveClick(event.data);

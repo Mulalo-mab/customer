@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -12,7 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class CustomerEdit implements OnInit {
 
-  customerForm: FormGroup;
+  customerForm!: FormGroup;
   customerId: string = '';
 
   // GPS format tracking
@@ -352,7 +352,101 @@ export class CustomerEdit implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.customerForm = this.createForm();
+    // Initialize the form directly in the constructor
+    this.customerForm = this.fb.group({
+      // Company Information
+      companyCode: [{value: '', disabled: true}],
+      companyName: ['', [Validators.required, Validators.minLength(2)]],
+      registeredCompanyName: [''],
+      prevCompanyName: [''],
+      accountNumber: [''],
+
+      // Physical Address
+      addressLine1: [''],
+      addressLine2: [''],
+      addressLine3: [''],
+      suburb: [''],
+      city: [''],
+      area: [''],
+      country: [''],
+      postalCode: [''],
+
+      // Contact Information
+      telephone: [''],
+      altPhone: [''],
+      fax: [''],
+
+      // Dropdown Selections
+      listing: [[]],
+      industryType: [[]],
+      serviceType: [[]],
+
+      // Financial Address
+      finAddressLine1: [''],
+      finAddressLine2: [''],
+      finAddressLine3: [''],
+      finSuburb: [''],
+      finCity: [''],
+      finPostalCode: [''],
+      finRegion: [''],
+      finCountry: [''],
+      finTelephone: [''],
+      finFax: [''],
+      vat: [''],
+      website: [''],
+
+      // Assigned Fields
+      assignedTo: [''],
+      product: [[]],
+      zone: [''],
+
+      // Postal Address
+      posAddress1: [''],
+      posAddress2: [''],
+      posAddress3: [''],
+      posSuburb: [''],
+      posCity: [''],
+      posZipCode: [''],
+      posRegion: [''],
+      posCountry: [''],
+
+      // PO Required Section
+      poRequired: [''],
+      accountType: [''],
+      region: [''],
+
+      // GPS Coordinates
+      gps: [''],
+
+      // DD Format
+      ddLatitude: [''],
+      ddLongitude: [''],
+
+      // DM Format
+      dmNorthSouth: ['N'],
+      dmLatitudeDegrees: [''],
+      dmLatitudeMinutes: [''],
+      dmEastWest: ['E'],
+      dmLongitudeDegrees: [''],
+      dmLongitudeMinutes: [''],
+
+      // DMS Format
+      dmsNorthSouth: ['N'],
+      dmsLatitudeDegrees: [''],
+      dmsLatitudeMinutes: [''],
+      dmsLatitudeSeconds: [''],
+      dmsEastWest: ['E'],
+      dmsLongitudeDegrees: [''],
+      dmsLongitudeMinutes: [''],
+      dmsLongitudeSeconds: [''],
+
+      // Additional Information
+      remark: [''],
+      flag: [''],
+
+      // File Upload
+      files: this.fb.array([])
+    });
   }
 
   ngOnInit(): void {
@@ -476,103 +570,6 @@ export class CustomerEdit implements OnInit {
         ddLongitude: long.trim()
       });
     }
-  }
-
-  createForm(): FormGroup {
-    return this.fb.group({
-      // Company Information
-      companyCode: [''],
-      companyName: ['', [Validators.required, Validators.minLength(2)]],
-      registeredCompanyName: [''],
-      prevCompanyName: [''],
-      accountNumber: [''],
-
-      // Physical Address
-      addressLine1: [''],
-      addressLine2: [''],
-      addressLine3: [''],
-      suburb: [''],
-      city: [''],
-      area: [''],
-      country: [''],
-      postalCode: [''],
-
-      // Contact Information
-      telephone: [''],
-      altPhone: [''],
-      fax: [''],
-
-      // Dropdown Selections
-      listing: [[]],
-      industryType: [[]],
-      serviceType: [[]],
-
-      // Financial Address
-      finAddressLine1: [''],
-      finAddressLine2: [''],
-      finAddressLine3: [''],
-      finSuburb: [''],
-      finCity: [''],
-      finPostalCode: [''],
-      finRegion: [''],
-      finCountry: [''],
-      finTelephone: [''],
-      finFax: [''],
-      vat: [''],
-      website: [''],
-
-      // Assigned Fields
-      assignedTo: [''],
-      product: [[]],
-      zone: [''],
-
-      // Postal Address
-      posAddress1: [''],
-      posAddress2: [''],
-      posAddress3: [''],
-      posSuburb: [''],
-      posCity: [''],
-      posZipCode: [''],
-      posRegion: [''],
-      posCountry: [''],
-
-      // PO Required Section
-      poRequired: [''],
-      accountType: [''],
-      region: [''],
-
-      // GPS Coordinates
-      gps: [''],
-
-      // DD Format
-      ddLatitude: [''],
-      ddLongitude: [''],
-
-      // DM Format
-      dmNorthSouth: ['N'],
-      dmLatitudeDegrees: [''],
-      dmLatitudeMinutes: [''],
-      dmEastWest: ['E'],
-      dmLongitudeDegrees: [''],
-      dmLongitudeMinutes: [''],
-
-      // DMS Format
-      dmsNorthSouth: ['N'],
-      dmsLatitudeDegrees: [''],
-      dmsLatitudeMinutes: [''],
-      dmsLatitudeSeconds: [''],
-      dmsEastWest: ['E'],
-      dmsLongitudeDegrees: [''],
-      dmsLongitudeMinutes: [''],
-      dmsLongitudeSeconds: [''],
-
-      // Additional Information
-      remark: [''],
-      flag: [''],
-
-      // File Upload
-      files: this.fb.array([])
-    });
   }
 
   // Get files from array
@@ -955,5 +952,16 @@ export class CustomerEdit implements OnInit {
   // Go back to list
   goBackToList(): void {
     this.router.navigate(['/customers']);
+  }
+
+  // REMOVED the duplicate form declaration:
+  // form = this.fb.group({
+  //   listing: [[]]
+  // });
+
+  onSelectChange(event: Event) {
+    const selectedOptions = (event.target as HTMLSelectElement).selectedOptions;
+    const values = Array.from(selectedOptions).map(option => option.value);
+    this.customerForm.get('listing')?.setValue(values);
   }
 }

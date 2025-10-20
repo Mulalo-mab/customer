@@ -1,3 +1,30 @@
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.panel-info {
+  border-color: #bce8f1;
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+
 /* Create New Link Styling */
 .create-new-link {
   color: #337ab7;
@@ -49,7 +76,14 @@
 
 
 
+.glyphicon-style:hover {
+  background-color: #337ab7 !important;
+  border-color: #286090 !important;
+}
 
+  .glyphicon-style:hover i {
+    color: white !important;
+  }
 
 /* Bootstrap overrides for consistent styling */
 .container-fluid {
@@ -135,7 +169,7 @@ h2 {
   }
 
   .input-group .form-control {
-    
+    font-size: 14px;
     position: relative;
     z-index: 2;
     float: left;
@@ -189,6 +223,7 @@ h2 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff5cb85c', endColorstr='#ff419641', GradientType=0);
   background-repeat: repeat-x;
   border-color: #3e8f3e;
+  font-weight: 500;
 }
 
 .btn-success {
@@ -223,6 +258,8 @@ h2 {
   border: 1px solid transparent;
   border-radius: 4px;
 }
+
+
 
 /* Clear float */
 .mb-3::after {
@@ -294,6 +331,93 @@ h2 {
 /* Container fluid adjustment */
 .container-fluid {
   padding: 0 15px;
+}
+
+/* FIXED LAYOUT STYLES */
+.controls-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  gap: 15px;
+  padding: 10px;
+ 
+ 
+}
+
+.left-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.right-controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* Page selector specific fixes */
+.page-selector {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.page-label {
+  white-space: nowrap !important;
+  color: #495057 !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Toggle container fixes */
+.toggle-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure form controls are properly aligned */
+.form-select-sm {
+  height: calc(1.5em + 0.5rem + 2px);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Input group fixes */
+.input-group {
+  display: flex;
+  align-items: stretch;
+}
+
+.input-group-append {
+  display: flex;
+  margin-left: -1px;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .controls-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .left-controls {
+    justify-content: space-between;
+  }
+
+  .right-controls {
+    justify-content: center;
+  }
+
+  .input-group {
+    width: 100% !important;
+  }
 }
 
 
@@ -427,7 +551,8 @@ h2 {
 }
 
 .custom-panel-body {
-  padding: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   background-color: #fff;
 }
 

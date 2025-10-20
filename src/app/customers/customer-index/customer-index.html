@@ -23,15 +23,17 @@
 
   <div class="panel-body custom-panel-body">
     <div class="container-fluid">
-      <div class="row align-items-center mb-3">
+      <!-- Fixed inline layout for controls -->
+      <div class="controls-container">
         <!-- Left side: Toggle + Page -->
-        <div class="col-md-6 d-flex align-items-center gap-3 flex-wrap">
-          <div style="display:inline-block;width:120px;">
+        <div class="left-controls">
+          <!-- Toggle -->
+          <div class="toggle-container">
             <input id="hActive" name="Active" type="hidden" value="Y">
             <div class="toggle btn btn-success btn-xs" data-toggle="toggle" style="width: 100%; height: 21.6px;">
-              <input name="IsActive" checked id="IsActive" type="checkbox" data-toggle="toggle" data-on="Show Active"
-                     data-off="Show Archive" data-width="100%" data-onstyle="success" data-size="mini"
-                     data-offstyle="warning">
+              <input name="IsActive" checked id="IsActive" type="checkbox" data-toggle="toggle"
+                     data-on="Show Active" data-off="Show Archive" data-width="100%"
+                     data-onstyle="success" data-size="mini" data-offstyle="warning">
               <div class="toggle-group">
                 <label class="btn btn-success btn-xs toggle-on">Show Active</label>
                 <label class="btn btn-warning btn-xs active toggle-off">Show Archive</label>
@@ -40,9 +42,12 @@
             </div>
           </div>
 
-          <div class="d-flex align-items-center">
-            <span class="fw-bold me-2"><strong>Page(s):</strong></span>
-            <select class="form-select form-select-sm" style="width: 60px;">
+          <!-- Page Dropdown - FIXED -->
+          <div class="page-selector" style="display: flex; align-items: center; gap: 8px;">
+            <span class="page-label fw-bold" style="white-space: nowrap; color: #333; font-size: 14px;">
+              Page(s):
+            </span>
+            <select class="form-select form-select-sm" style="width: 70px;">
               <option>5</option>
               <option>10</option>
               <option>20</option>
@@ -51,18 +56,17 @@
         </div>
 
         <!-- Right side: Search -->
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+        <div class="right-controls">
           <div class="input-group" style="width: 350px;">
-            <input type="text" class="form-control" placeholder="Search Companys Name" aria-label="Search" aria-describedby="search-button"
-                   [(ngModel)]="searchTerm"
-           (keypress)="onSearchKeyPress($event)">
+            <input type="text" class="form-control" placeholder="Search Companys Name" aria-label="Search" aria-describedby="search-button">
             <div class="input-group-append">
-              <button class="btn btn-success" type="button" id="search-button" (click)="onSearch()">
+              <button class="btn btn-success" type="button" id="search-button">
                 Search
               </button>
             </div>
           </div>
         </div>
+      </div>
 
 
       <!-- AG Grid -->

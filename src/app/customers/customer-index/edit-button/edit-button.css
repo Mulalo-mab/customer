@@ -1,13 +1,21 @@
-.blue-icon {
-  color: #007bff; /* Bootstrap primary blue */
+.table-edit-btn {
+  border: 1px solid #337ab7;
+  background-color: white;
+  padding: 0.15rem 0.3rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
 }
 
-/* Or if you want to use your existing blue */
-.blue-icon {
-  color: #337ab7;
-}
+  .table-edit-btn i {
+    color: #337ab7;
+    font-size: 0.875rem;
+  }
 
+  .table-edit-btn:hover {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+  }
 
-.btn-outline-primary .bi-pencil-square {
-  color: #337ab7;
-}
+    .table-edit-btn:hover i {
+      color: white;
+    }
